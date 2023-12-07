@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
+    <title>Katalog knjiga | RAF Knjižara</title>
+</head>
+<body>
+    <main class="container w-55">
+        <div class="row">
+            <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+                <div class="container-fluid">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="knjige.html">Ponuda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="narudzbine.html">Narudžbine</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="kategorije.html">Kategorije</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="pisci.html">Pisci</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <h1 class="my-3">Katalog knjiga</h1>
+        <div class="flex float-right">
+            <a href="novo-knjiga.html" class="btn btn-primary">Nova knjiga</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Knjiga</th>
+                <th>Opis</th>
+                <th>Cena</th>
+                <th>Akcija</th>
+            </tr>
+            </thead>
+            <tbody id="spisak">
+            </tbody>
+        </table>
+    </main>
+    <script>
+        window.addEventListener("load", async function(){
+            fetch('/knjige')
+                .then(response => response.json()).then( data=>{
+                    console.log(data)
+                    for(let i=0; i<data.length; i++){
+                       
+                        let tr = document.createElement("tr");
+                        let td1 = document.createElement("td");
+                        let td2 = document.createElement("td");
+                        let td3 = document.createElement("td");
+                        td1.innerHTML = data[i].naziv;
+                        td2.innerHTML = data[i].cena;
+                        td3.innerHTML = data[i].opis;
+                        tr.appendChild(td1);
+                        
+                        //<button class="btn btn-primary" onclick="">Promena cene</button>
+	                    //<a href="jelo.html?id=1" class="btn btn-primary">Izmeni</a>
+
+                        tr.appendChild(td3);
+                        tr.appendChild(td2);
+                        //… ostatak
+                        document.getElementById("spisak").appendChild(tr);
+                        //data[i].kategorija
+                        //data[i].cena
+                        
+                        //ovde ide i pridruzivanje click eventa na <button>  Promena cene
+                        let btn = document.createElement("button");
+                        let a = document.createElement("a");
+                        btn.innerHTML = "Promena cene";
+                        btn.classList = "btn btn-primary";
+                        a.classList = "btn btn-primary";
+                        a.href = "knjiga.html?id=1"
+                        a.innerHTML = "Izmeni";
+                        btn.addEventListener("click", function(){
+                        
+                        });
+
+                        let td4 = document.createElement("td");
+                        td4.appendChild(btn);
+                        td4.appendChild(a);
+                        tr.appendChild(td4);
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

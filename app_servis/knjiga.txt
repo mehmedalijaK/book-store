@@ -1,0 +1,8 @@
+{"naziv":"Ajfel","opis":"Ajfelova kula, simbol Francuske više od sto trideset godina, ovaploćuje jednu fantaziju i umeće življenja na francuski način.\r\n","kategorija":"1","cena":"900"}
+{"naziv":"Na Drini ćuprija","opis":"Najpoznatiji roman Iva Andrića, Na Drini ćuprija, hronološki opisuje svakodnevni život višegradske kasabe, koja se nalazi na obali rijeke Drine.","kategorija":"1","cena":"950"}
+{"naziv":"Kad su cvetale tikve","opis":"Roman Kad su cvetale tikve spada u prekretnička dela od kojih počinju nove tendencije literarnog razvitka.","kategorija":"1","cena":"700"}
+{"naziv":"Uvođenje u posao","opis":"Drame Dragoslava Mihailovića nastale su kao svojevrstan produžetak njegovih proznih dela i zamisli.","kategorija":"1","cena":"599"}
+{"naziv":"Život s depresijom","opis":"I meni se često čini da smo u klopci, ali kada već nismo odlučili otići, a nismo, onda bi bilo pošteno da utakmicu igramo do kraja.\r\n","kategorija":"1","cena":"799"}
+{"naziv":"Bibina bojanka","opis":"Svet je šaren i boje su svuda oko nas. Pogledajte oko sebe. Koje boje vidite?\r\n","kategorija":"1","cena":"499"}
+{"naziv":"Bibin svet od A do Š","opis":"Upoznajte azbuku tako što ćete upoznati svet devojčice Bibi.\r\n","kategorija":"4","cena":"399"}
+{"naziv":"Slučaj Vinča","opis":"Vinča, 15. oktobar 1958. U poslepodnevnim satima oglasio se centralni alarm za detekciju povišenog radioaktivnog zračenja.","kategorija":"1","cena":"799"}
