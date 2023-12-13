@@ -28,10 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     cena: {
       type: DataTypes.INTEGER,
       allowNull: false
-    },
-    kategorija_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
     }
   }, {
     sequelize,
