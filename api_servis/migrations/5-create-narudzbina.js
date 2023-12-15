@@ -2,21 +2,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Knjigas', {
+    await queryInterface.createTable('Narudzbinas', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      naziv: {
+      status: {
         type: Sequelize.STRING
       },
-      opis: {
-        type: Sequelize.STRING
+      vreme_narucivanja: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      cena: {
-        type: Sequelize.INTEGER
+      zakazano_vreme: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      adresa: {
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      telefon: {
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      ime_prezime: {
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -29,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Knjigas');
+    await queryInterface.dropTable('Narudzbinas');
   }
 };

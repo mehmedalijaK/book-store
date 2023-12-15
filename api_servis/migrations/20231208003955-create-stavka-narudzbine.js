@@ -12,6 +12,17 @@ module.exports = {
       komada: {
         type: Sequelize.INTEGER
       },
+      jedinicna_cena:{
+        type: Sequelize.INTEGER
+      },
+      knjigaId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      narudzbinaId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
