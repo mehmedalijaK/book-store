@@ -1,8 +1,11 @@
 const express = require('express')
+const { sequelize, Knjiga, Kategorija, KnjigaPisac, Pisac, StavkaNarudzbine, Narudzbina } = require("./models");
 const app = express()
 
-app.get('/', (req, res) => {
-    res.send('Hello from REST API service')
+app.get('/', async (req, res) => {
+    console.log("Started server on localhost:8000");
+    await sequelize.sync({force:true});
+    console.log("DB synced");
 })
 
 const knjigaRoutes = require('./routes/knjiga.js')

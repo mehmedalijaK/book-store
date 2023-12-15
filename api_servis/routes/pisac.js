@@ -1,4 +1,5 @@
 const express = require('express')
+const {Pisac} = require("../models");
 const route = express.Router()
 
 route.use(express.json())
@@ -6,7 +7,8 @@ route.use(express.urlencoded({extended: true}))
 
 route.get('/', async (req, res)=>{
     try{
-        return res.json("All authors")
+        const authors = await Pisac.findAll();
+        return res.json(authors);
     }catch(err) {
         console.log(err)
         res.status(500).json({error: "Error", data: err})
@@ -15,7 +17,8 @@ route.get('/', async (req, res)=>{
 
 route.get("/:id", async (req, res) => {
     try{
-         return res.json("Author with id=" + req.params.id)
+        const authors = await Pisac.findByPk(req.params.id);
+        return res.json(authors);
     }catch(err){
          console.log(err)
          res.status(500).json({ error: "Error", data: err })
@@ -24,7 +27,10 @@ route.get("/:id", async (req, res) => {
 
 route.post("/", async (req, res) => {
     try{
-         return res.json("New author")
+        const novi = {};
+        novi.naziv = req.body.mojNaziv;
+        const insertovani = await Pisac.create(novi);
+        return res.json(insertovani);
     }catch(err){
          console.log(err);
          res.status(500).json({ error: "Error", data: err })
@@ -34,7 +40,9 @@ route.post("/", async (req, res) => {
  
 route.put("/:id", async (req, res) => {
     try{
-        return res.json("Edit author with id")
+        const author = await Pisac.findByPk(req.params.id);
+        author.naziv = req.body.naziv;
+        author.save();
     }catch(err){
         console.log(err);
         res.status(500).json({ error: "Error", data: err })
@@ -44,7 +52,9 @@ route.put("/:id", async (req, res) => {
 
 route.delete("/:id", async (req, res) => {
     try{
-        return res.json(req.params.id);
+        const author = await Pisac.findByPk(req.params.id);
+        author.destroy();
+        return res.json( author.id );
     }catch(err){
         console.log(err);
         res.status(500).json({ error: "Error", data: err });

@@ -1,4 +1,5 @@
 const express = require('express')
+const {Narudzbina} = require("../models");
 const route = express.Router()
 
 route.use(express.json())
@@ -6,7 +7,8 @@ route.use(express.urlencoded({extended: true}))
 
 route.get('/', async (req, res)=>{
     try{
-        return res.json("All orders")
+        const orders = await Narudzbina.findAll();
+        return res.json(orders);
     }catch(err) {
         console.log(err)
         res.status(500).json({error: "Error", data: err})
@@ -15,16 +17,27 @@ route.get('/', async (req, res)=>{
 
 route.get("/:id", async (req, res) => {
     try{
-         return res.json("Order with id=" + req.params.id)
+        const orders = await Narudzbina.findByPk(req.params.id);
+        return res.json(orders);
     }catch(err){
-         console.log(err)
-         res.status(500).json({ error: "Error", data: err })
+        console.log(err)
+        res.status(500).json({ error: "Error", data: err })
     }
 })
 
 route.post("/", async (req, res) => {
     try{
-         return res.json("New order")
+        const novi = {};
+        novi.status = req.body.status
+        novi.vreme_narucivanja = req.body.vreme_narucivanja
+        novi.zakazano_vreme = req.body.zakazano_vreme
+        novi.adresa = req.body.adresa
+        novi.telefon = req.body.telefon
+        novi.ime_prezime = req.body.ime_prezime
+        novi.createdAt = req.body.createdAt
+        novi.updatedAt = req.body.updatedAt
+        const insertovani = await Narudzbina.create(novi);
+        return res.json(insertovani);
     }catch(err){
          console.log(err);
          res.status(500).json({ error: "Error", data: err })
@@ -34,7 +47,14 @@ route.post("/", async (req, res) => {
  
 route.put("/:id", async (req, res) => {
     try{
-        return res.json("Edit order with id")
+        const novi = await Narudzbina.findByPk(req.params.id);
+        novi.status = req.body.status
+        novi.vreme_narucivanja = req.body.vreme_narucivanja
+        novi.zakazano_vreme = req.body.zakazano_vreme
+        novi.adresa = req.body.adresa
+        novi.telefon = req.body.telefon
+        novi.ime_prezime = req.body.ime_prezime
+        novi.save();
     }catch(err){
         console.log(err);
         res.status(500).json({ error: "Error", data: err })
@@ -44,7 +64,9 @@ route.put("/:id", async (req, res) => {
 
 route.delete("/:id", async (req, res) => {
     try{
-        return res.json(req.params.id);
+        const order = await Narudzbina.findByPk(req.params.id);
+        order.destroy();
+        return res.json( order.id );
     }catch(err){
         console.log(err);
         res.status(500).json({ error: "Error", data: err });
