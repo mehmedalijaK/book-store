@@ -1,6 +1,13 @@
 const express = require('express')
 const { sequelize, Knjiga, Kategorija, KnjigaPisac, Pisac, StavkaNarudzbine, Narudzbina } = require("./models");
 const app = express()
+const cors = require("cors")
+
+const corsOptions = {
+    origin: ['http://localhost:8000', 'http://127.0.0.1:8000']
+  };
+  
+app.use(cors(corsOptions));
 
 app.get('/', async (req, res) => {
     console.log("Started server on localhost:8000");
