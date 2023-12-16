@@ -10,7 +10,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.get('/', async (req, res) => {
-    console.log("Started server on localhost:8000");
+    console.log("Started server on localhost:9000");
     await sequelize.sync({force:true});
     console.log("DB synced");
 })

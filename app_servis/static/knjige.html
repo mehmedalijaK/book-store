@@ -43,6 +43,7 @@
                 <th>Knjiga</th>
                 <th>Opis</th>
                 <th>Cena</th>
+                <th>Kategorija</th>
                 <th>Akcija</th>
             </tr>
             </thead>
@@ -52,18 +53,20 @@
     </main>
     <script>
         window.addEventListener("load", async function(){
-            fetch('/knjige')
+            fetch('http://localhost:9000/knjiga/')
                 .then(response => response.json()).then( data=>{
                     console.log(data)
                     for(let i=0; i<data.length; i++){
-                       
+                        
                         let tr = document.createElement("tr");
                         let td1 = document.createElement("td");
                         let td2 = document.createElement("td");
                         let td3 = document.createElement("td");
+                        let td8 = document.createElement("td");
                         td1.innerHTML = data[i].naziv;
                         td2.innerHTML = data[i].cena;
                         td3.innerHTML = data[i].opis;
+                        td8.innerHTML = data[i].kategorija.naziv;
                         tr.appendChild(td1);
                         
                         //<button class="btn btn-primary" onclick="">Promena cene</button>
@@ -71,6 +74,7 @@
 
                         tr.appendChild(td3);
                         tr.appendChild(td2);
+                        tr.appendChild(td8);
                         //… ostatak
                         document.getElementById("spisak").appendChild(tr);
                         //data[i].kategorija
@@ -79,19 +83,43 @@
                         //ovde ide i pridruzivanje click eventa na <button>  Promena cene
                         let btn = document.createElement("button");
                         let a = document.createElement("a");
+
+                        a.classList = "btn btn-primary";
+                        a.href = "knjiga.html?id=" + data[i].id
+                        a.innerHTML = "Izmeni";
+                        tr.dataset.id = data[i].id
+                        console.log(tr.dataset.id)
                         btn.innerHTML = "Promena cene";
                         btn.classList = "btn btn-primary";
-                        a.classList = "btn btn-primary";
-                        a.href = "knjiga.html?id=1"
-                        a.innerHTML = "Izmeni";
+                        tr.dataset.id = data[i].id
                         btn.addEventListener("click", function(){
-                        
+                            var c = prompt("Unesi novu cenu:");
+                            var id = this.closest("tr").dataset.id;
+                            console.log(c)
+                            console.log(id)
+                            fetch("http://localhost:9000/knjiga/promeni-cenu/" + id, {
+                                        method: 'PUT',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ cena: c })    	
+                            })
+                            .then( response=>response.json())
+                            .then( data=>{
+                                document.querySelectorAll(` #spisak > tr[data-id='${data.id}'] > td:nth-child(2) `)
+                                .innerHTML = data.cena; 
+                                location.replace(location.href);
+                            })
+                            .catch( err=>{
+                                        
+                                        console.log(err);                  
+                            });
+                            
                         });
 
                         let td4 = document.createElement("td");
                         td4.appendChild(btn);
                         td4.appendChild(a);
                         tr.appendChild(td4);
+                        
                     }
 
                 })

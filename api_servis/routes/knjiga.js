@@ -1,5 +1,5 @@
 const express = require('express')
-const {Knjiga} = require("../models");
+const {Knjiga, Kategorija} = require("../models");
 const route = express.Router()
 
 route.use(express.json())
@@ -8,8 +8,12 @@ route.use(express.urlencoded({extended: true}))
 route.get('/', async (req, res)=>{
     try{
         console.log("here")
-        const books = await Knjiga.findAll();
-       
+        const books = await Knjiga.findAll({
+            include: {
+              model: Kategorija, as: "kategorija",
+              required: true
+            }
+          });
         return res.json(books);
     }catch(err) {
         console.log(err)
@@ -51,6 +55,19 @@ route.put("/:id", async (req, res) => {
         book.cena = req.query.cena;
         book.KategorijaId = req.query.KategorijaId;
         console.log(book)
+        book.save();
+        return res.json(book);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({ error: "Error", data: err })
+    }
+})
+
+
+route.put("/promeni-cenu/:id", async (req, res)=> {
+    try{
+        const book = await Knjiga.findByPk(req.params.id);
+        book.cena = req.body.cena;
         book.save();
         return res.json(book);
     }catch(err){
