@@ -12,11 +12,11 @@ module.exports = {
       test: {
         type: Sequelize.STRING
       },
-      knjigaId: {
+      KnjigaId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      pisacId: {
+      PisacId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },

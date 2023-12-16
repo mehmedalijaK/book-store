@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     queryInterface.addConstraint('Knjigas', {
-      fields: ['kategorijaId'],
+      fields: ['KategorijaId'],
       type: 'foreign key',
       references: {
         table:'Kategorijas',
@@ -14,7 +14,7 @@ module.exports = {
       onDelete: 'CASCADE',
     })
     queryInterface.addConstraint('KnjigaPisacs', {
-      fields: ['knjigaId'],
+      fields: ['KnjigaId'],
       type: 'foreign key',
       references: {
         table:'Knjigas',
@@ -24,7 +24,7 @@ module.exports = {
       onDelete: 'CASCADE',
     })
     queryInterface.addConstraint('KnjigaPisacs', {
-      fields: ['pisacId'],
+      fields: ['PisacId'],
       type: 'foreign key',
       references: {
         table:'Pisacs',
@@ -34,7 +34,7 @@ module.exports = {
       onDelete: 'CASCADE',
     })
     queryInterface.addConstraint('StavkaNarudzbines', {
-      fields: ['knjigaId'],
+      fields: ['KnjigaId'],
       type: 'foreign key',
       references: {
         table:'Knjigas',
@@ -44,7 +44,7 @@ module.exports = {
       onDelete: 'CASCADE',
     })
     queryInterface.addConstraint('StavkaNarudzbines', {
-      fields: ['narudzbinaId'],
+      fields: ['NarudzbinaId'],
       type: 'foreign key',
       references: {
         table:'Narudzbinas',

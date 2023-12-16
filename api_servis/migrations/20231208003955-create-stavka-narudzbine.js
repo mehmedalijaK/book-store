@@ -15,11 +15,11 @@ module.exports = {
       jedinicna_cena:{
         type: Sequelize.INTEGER
       },
-      knjigaId: {
+      KnjigaId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      narudzbinaId: {
+      NarudzbinaId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
@@ -34,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('StavkaNarudzbines');
+    await queryInterface.dropTable('StavkaNarudzbines', { cascade: true });
   }
 };

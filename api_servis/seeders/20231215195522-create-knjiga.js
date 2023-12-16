@@ -5,8 +5,8 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Knjigas',
     [
-      {id:"1",naziv:"Mali princ", opis:"Jedna fina knjiga", cena: 1200, kategorijaId:1, createdAt: new Date(), updatedAt: new Date()},
-      {id:"2",naziv:"My name is red", opis:"Good book", cena: 300, kategorijaId:2, createdAt: new Date(), updatedAt: new Date()}
+      {id:"1",naziv:"Mali princ", opis:"Jedna fina knjiga", cena: 1200, KategorijaId:1, createdAt: new Date(), updatedAt: new Date()},
+      {id:"2",naziv:"My name is red", opis:"Good book", cena: 300, KategorijaId:2, createdAt: new Date(), updatedAt: new Date()}
     ]);
 
   },

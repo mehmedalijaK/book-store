@@ -7,7 +7,9 @@ route.use(express.urlencoded({extended: true}))
 
 route.get('/', async (req, res)=>{
     try{
+        console.log("here")
         const books = await Knjiga.findAll();
+       
         return res.json(books);
     }catch(err) {
         console.log(err)
@@ -28,8 +30,10 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
     try{
         const novi = {};
-        novi.naziv = req.body.mojNaziv;
-        novi.opis = req.body.opis;
+        novi.naziv = req.query.naziv;
+        novi.opis = req.query.opis;
+        novi.cena = req.query.cena;
+        novi.KategorijaId = req.query.KategorijaId;
         const insertovani = await Knjiga.create(novi);
         return res.json(insertovani);
     }catch(err){
@@ -42,10 +46,11 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     try{
         const book = await Knjiga.findByPk(req.params.id);
-        book.naziv = req.body.naziv;
-        book.opis = req.body.opis;
-        book.cena = req.body.cena;
-        book.kategorija_id = req.body.kategorija_id;
+        book.naziv = req.query.naziv;
+        book.opis = req.query.opis;
+        book.cena = req.query.cena;
+        book.KategorijaId = req.query.KategorijaId;
+        console.log(book)
         book.save();
         return res.json(book);
     }catch(err){

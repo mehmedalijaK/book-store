@@ -18,7 +18,7 @@ module.exports = {
       cena: {
         type: Sequelize.INTEGER
       },
-      kategorijaId: {
+      KategorijaId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },

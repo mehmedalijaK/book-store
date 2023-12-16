@@ -23,6 +23,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Kategorijas');
+    await queryInterface.dropTable('Kategorijas', { cascade: true });
   }
 };

@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({Kategorija, Pisac, StavkaNarudzbine}) {
-      this.belongsTo(Kategorija, {foreignKey: "kategorija_id", as: "kategorija"});
-      this.hasMany(StavkaNarudzbine, {foreignKey: "knjiga_id", as: "stavke"});
-      this.belongsToMany(Pisac, {foreignKey: "knjiga_id", as: "pisci", through:"KnjigaPisac"});
+    static associate(models) {
+      this.belongsTo(models.Kategorija, {foreignKey: "KategorijaId", as: "kategorija"});
+      this.hasMany(models.StavkaNarudzbine, {foreignKey: "KnjigaId", as: "stavke"});
+      this.belongsToMany(models.Pisac, {foreignKey: "KnjigaId", as: "pisci", through:"KnjigaPisac"});
     }
   }
   Knjiga.init({
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     cena: {
       type: DataTypes.INTEGER,
       allowNull: false
-    }
+    }, 
   }, {
     sequelize,
     modelName: 'Knjiga',

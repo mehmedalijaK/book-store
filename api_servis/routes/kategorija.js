@@ -7,6 +7,7 @@ route.use(express.urlencoded({extended: true}))
 
 route.get('/', async (req, res)=>{
     try{
+        console.log("test")
         const categories = await Kategorija.findAll();
         return res.json(categories);
     }catch(err) {
