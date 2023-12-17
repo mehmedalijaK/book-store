@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="http://localhost:8000/admin/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="main.css">
-    <title>Izmena knjige | RAF Knjižara</title>
-    <script src="knjiga.js"></script>
+    <title>Dodavanje nove knjige - Knjižara RAF</title>
 </head>
 <body>
     <main class="container w-50">
@@ -33,12 +33,13 @@
                 </div>
             </nav>
         </div>
-        <h1 class="my-3">Izmeni informaciji o knjizi</h1>
-        <form method="post" action="http://postman-echo.com/post"
-              id="forma">
+        <h1 class="my-3">Dodajte novu knjigu</h1>
+        <form method="post" action="/novo-knjiga" onload=""
+        id="forma">
             <div class="mb-3 mt-3">
                 <label for="naziv" class="form-label">Naziv:</label>
-                <input type="text" aria-multiline="false" class="form-control" id="naziv" placeholder="Unesite naziv" name="naziv" required>
+                <input type="text" aria-multiline="false" class="form-control" id="naziv" placeholder="Unesite naziv" name="naziv" required
+                       onkeypress="this.classList.remove('success'); this.classList.remove('error')">
             </div>
             <div class="mb-3">
                 <label for="opis">Opis:</label>
@@ -66,57 +67,15 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <label for="naziv">Pisci:</label>
-                <div class="input-group mb-3">
-                    <select class="form-select" id="spisak-pisaca">
-                        <option></option>
-                        <option value="1">Ivo Andrić</option>
-                        <option value="2">Barni Stinson</option>
-                        <option value="3">Anton de Sent Egziperi</option>
-                        <option value="4">Simon Sinek</option>
-                        <option value="5">Orhan Pamuk</option>
-                        <option value="6">Dragoslav Mihailović</option>
-                    </select>
-                    <button class="btn btn-success" type="button" id="dodaj-pisca">+</button>
-                </div>
-            </div>
-            <div id="pisci">
-
-            </div>
             <div class="mt-3 mb-5">
-                <button type="submit" class="btn btn-primary">Sačuvaj</button>
-                <button class="btn btn-danger" id="obrisi-btn" >Obriši</button>
-                <a href="knjige.html" class="btn btn-link">Nazad</a>
-                <input type="hidden" name="pisci" id="pisci-input">
+                <button type="submit" class="btn btn-primary">Unesi</button>
+                <a href="jela.html" class="btn btn-link">Nazad</a>
             </div>
         </form>
 
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
     <script>
-        var id = null
-        var url = new URL( window.location.href )
-
-        id = url.searchParams.get("id");  //shvatiće da se misli na globalnu varijablu id
-
-        fetch("http://localhost:9000/knjiga/" + id).then( resp=>resp.json() )
-        .then( data=>{
-                    console.log(data); //proverite sta ste dobili
-                    document.getElementById("naziv").value = data.naziv;
-                    document.getElementById("opis").value = data.opis;
-                    document.getElementById("cena").value = data.cena;
-                    for(let i=0; i<data.sastojci.length; i++){
-                        dodajSastojak(data.pisci[i]); //zavisno sta je u nizu, mozda vam treba .id
-                    }
-        })
-        .catch(err=>console.log(err));
-
-        window.onload = function() {
-            var forma = document.getElementById('forma');
-            forma.addEventListener('submit', handleSubmit);
-        };
-
         function validacija() {
             var validno = true;
             if( document.getElementById("naziv").value.length < 3 ){
@@ -132,6 +91,11 @@
             return validno;
         }
 
+        window.onload = function() {
+            var forma = document.getElementById('forma');
+            forma.addEventListener('submit', handleSubmit);
+        };
+
         function handleSubmit(event){
             event.preventDefault();       	//sprecimo default ponasanje
             var validno = validacija();    	//uradimo validaciju
@@ -141,12 +105,12 @@
             novoKnjiga.naziv = document.getElementById("naziv").value;
             novoKnjiga.cena = document.getElementById("cena").value;
             novoKnjiga.opis = document.getElementById("opis").value;
-            novoKnjiga.kategorijaId = 1
+            novoKnjiga.KategorijaId = 1
 
             console.log(novoKnjiga)
 
-            fetch("http://localhost:9000/knjiga/"+id, {
-                        method:"PUT",
+            fetch("http://localhost:9000/knjiga", {
+                        method:"POST",
                                     headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(novoKnjiga)
             })
@@ -154,27 +118,12 @@
             .then(data=>{
                         //dobili smo objekat novounesenog jela, koje ima svoj id, super
                         //mozemo nazad na spisak, a mozemo i na izmenu tog jela
-                       window.location.href=`/knjige.html`;
-                       console.log(data)
+                        window.location.href=`/knjiga.html?id=${data.id}`;
             })
             .catch(err => console.log(err));       	
         }
-        document.getElementById("obrisi-btn").addEventListener("click", function() {
-            if( confirm("Potvrdi brisanje") ){
-                fetch("http://localhost:9000/knjiga/"+id, { method:"DELETE" })
-                    .then( resp=>resp.json()).then(data=>{
-                    //response sadrzi samo id obrisanog
-                    alert("Obrisan je zapis "+data);
-                                window.location.href("/jelo"); //predji na spisak
-                    })
-                .catch( err=>console.log(err));
-
-            } else {
-                return;
-            }
-        });
-
 
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
