@@ -34,10 +34,10 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
     try{
         const novi = {};
-        novi.naziv = req.query.naziv;
-        novi.opis = req.query.opis;
-        novi.cena = req.query.cena;
-        novi.KategorijaId = req.query.KategorijaId;
+        novi.naziv = req.body.naziv;
+        novi.opis = req.body.opis;
+        novi.cena = req.body.cena;
+        novi.KategorijaId = 1;
         const insertovani = await Knjiga.create(novi);
         return res.json(insertovani);
     }catch(err){
