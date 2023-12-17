@@ -37,7 +37,7 @@ route.post("/", async (req, res) => {
         novi.naziv = req.body.naziv;
         novi.opis = req.body.opis;
         novi.cena = req.body.cena;
-        novi.KategorijaId = 1;
+        novi.KategorijaId = req.body.KategorijaId;
         const insertovani = await Knjiga.create(novi);
         return res.json(insertovani);
     }catch(err){
@@ -50,10 +50,10 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     try{
         const book = await Knjiga.findByPk(req.params.id);
-        book.naziv = req.query.naziv;
-        book.opis = req.query.opis;
-        book.cena = req.query.cena;
-        book.KategorijaId = req.query.KategorijaId;
+        book.naziv = req.body.naziv;
+        book.opis = req.body.opis;
+        book.cena = req.body.cena;
+        book.KategorijaId = req.body.KategorijaId;
         console.log(book)
         book.save();
         return res.json(book);
