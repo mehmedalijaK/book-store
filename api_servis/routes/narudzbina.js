@@ -1,5 +1,5 @@
 const express = require('express')
-const {Narudzbina} = require("../models");
+const {Narudzbina, StavkaNarudzbine} = require("../models");
 const route = express.Router()
 
 route.use(express.json())
@@ -12,6 +12,20 @@ route.get('/', async (req, res)=>{
     }catch(err) {
         console.log(err)
         res.status(500).json({error: "Error", data: err})
+    }
+})
+
+route.get('/proizvodi/:id', async (req, res) => {
+    try{
+        const products = await StavkaNarudzbine.findAll({
+            where: {
+              NarudzbinaId: req.params.id
+            }
+          });
+        return res.json(products);
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ error: "Error", data: err })
     }
 })
 
