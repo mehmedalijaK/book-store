@@ -88,6 +88,21 @@
         window.onload = function() {
             var forma = document.getElementById('forma');
             forma.addEventListener('submit', handleSubmit);
+
+            fetch("http://localhost:9000/pisac", {
+                        method:"GET",
+                                    headers: { 'Content-Type': 'application/json' },
+            }).then(succ=>succ.json())
+            .then(data=>{
+                var selectElement = document.getElementById("spisak-pisaca");
+                data.forEach(function(category) {
+                    var option = document.createElement("option");
+                    option.value = category.id;
+                    option.text = category.naziv;
+                    selectElement.add(option);
+                });
+            })
+
             fetch("http://localhost:9000/kategorija", {
                         method:"GET",
                                     headers: { 'Content-Type': 'application/json' },
