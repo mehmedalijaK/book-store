@@ -50,12 +50,7 @@
                     <div class="mb-3">
                         <label for="kategorija">Kategorija proizvoda:</label>
                         <select class="form-select" name="kategorija" id="kategorija">
-                            <option value="1">Domaći pisci</option>
-                            <option value="2">Trileri</option>
-                            <option value="3">Istorija</option>
-                            <option value="4">Ljubavni romani</option>
-                            <option value="5">Biznis i ekonomija</option>
-                            <option value="6">Fantastika</option>
+
                         </select>
                     </div>
                 </div>
@@ -94,6 +89,21 @@
         window.onload = function() {
             var forma = document.getElementById('forma');
             forma.addEventListener('submit', handleSubmit);
+
+            fetch("http://localhost:9000/kategorija", {
+                        method:"GET",
+                                    headers: { 'Content-Type': 'application/json' },
+            }).then(succ=>succ.json())
+            .then(data=>{
+                var selectElement = document.getElementById("kategorija");
+                var selectElement = document.getElementById("kategorija");
+                data.forEach(function(category) {
+                    var option = document.createElement("option");
+                    option.value = category.id;
+                    option.text = category.naziv;
+                    selectElement.add(option);
+                });
+            })
         };
 
         function handleSubmit(event){
@@ -105,7 +115,8 @@
             novoKnjiga.naziv = document.getElementById("naziv").value;
             novoKnjiga.cena = document.getElementById("cena").value;
             novoKnjiga.opis = document.getElementById("opis").value;
-            novoKnjiga.KategorijaId = 1
+            console.log(document.getElementById("kategorija").value)
+            novoKnjiga.KategorijaId = document.getElementById("kategorija").value;
 
             console.log(novoKnjiga)
 
@@ -116,9 +127,7 @@
             })
             .then(succ=>succ.json())
             .then(data=>{
-                        //dobili smo objekat novounesenog jela, koje ima svoj id, super
-                        //mozemo nazad na spisak, a mozemo i na izmenu tog jela
-                        window.location.href=`/knjiga.html?id=${data.id}`;
+                    window.location.href=`/admin/knjige.html`;
             })
             .catch(err => console.log(err));       	
         }

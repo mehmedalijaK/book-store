@@ -28,7 +28,7 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
     try{
         const novi = {};
-        novi.naziv = req.query.naziv;
+        novi.naziv = req.body.naziv;
         const insertovani = await Pisac.create(novi);
         return res.json(insertovani);
     }catch(err){
@@ -41,7 +41,7 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     try{
         const author = await Pisac.findByPk(req.params.id);
-        author.naziv = req.query.naziv;
+        author.naziv = req.body.naziv;
         author.save();
         return res.json(author);
     }catch(err){

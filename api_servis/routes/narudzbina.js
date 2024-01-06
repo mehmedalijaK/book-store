@@ -28,12 +28,12 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
     try{
         const novi = {};
-        novi.status = req.query.status
-        novi.vreme_narucivanja = req.query.vreme_narucivanja
-        novi.zakazano_vreme = req.query.zakazano_vreme
-        novi.adresa = req.query.adresa
-        novi.telefon = req.query.telefon
-        novi.ime_prezime = req.query.ime_prezime
+        novi.status = req.body.status
+        novi.vreme_narucivanja = req.body.vreme_narucivanja
+        novi.zakazano_vreme = req.body.zakazano_vreme
+        novi.adresa = req.body.adresa
+        novi.telefon = req.body.telefon
+        novi.ime_prezime = req.body.ime_prezime
         const insertovani = await Narudzbina.create(novi);
         return res.json(insertovani);
     }catch(err){

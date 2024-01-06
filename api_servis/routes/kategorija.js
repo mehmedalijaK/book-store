@@ -29,7 +29,7 @@ route.get("/:id", async (req, res) => {
 route.post("/", async (req, res) => {
     try{
         const novi = {};
-        novi.naziv = req.query.naziv;
+        novi.naziv = req.body.naziv;
         const insertovani = await Kategorija.create(novi);
         return res.json(insertovani);
     }catch(err){
@@ -42,7 +42,7 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     try{
         const category = await Kategorija.findByPk(req.params.id);
-        category.naziv = req.query.naziv;
+        category.naziv = req.body.naziv;
         category.save();
         return res.json(category);
     }catch(err){
