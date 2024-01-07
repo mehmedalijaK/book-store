@@ -98,7 +98,8 @@ export default {
       else return false;
     },
     ...mapState([
-      'knjige'
+      'knjige',
+      'token'
     ]),
     fields() {
       return [
@@ -120,7 +121,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchKnjige();
+    this.fetchKnjige(this.token);
   },
   methods: {
     ...mapActions([
@@ -160,7 +161,8 @@ export default {
         if (this.validnoImePrezime && this.validnoAdresa && this.validnoBrojTelefona) {
 				fetch("http://localhost:9000/narudzbina", {
 					headers: {
-						'Content-Type': 'application/json'
+						'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
 					},
 					method: "POST",
 					body: JSON.stringify(payload)

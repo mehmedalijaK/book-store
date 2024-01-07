@@ -7,7 +7,7 @@ require('dotenv').config();
 const route = express.Router()
 
 const corsOptions = {
-    origin: ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8081']
+    origin: ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8081', 'http://localhost:8080']
 };
 
 function authToken(req, res, next) {

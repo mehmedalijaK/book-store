@@ -25,8 +25,10 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async fetchKnjige({commit}){
-      fetch(`http://localhost:9000/knjiga`)
+    async fetchKnjige({commit}, token){
+      fetch(`http://localhost:9000/knjiga`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      })
         .then( res=>res.json() )
           .then( data => commit('addKnjige', data) );
     },

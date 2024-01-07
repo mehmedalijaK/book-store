@@ -9,7 +9,7 @@
             <b-nav-item v-if="token" to="/create-order" style="color: green;">Create order</b-nav-item>
             <b-nav-item v-if="!token" to="/register" style="color: orange;">Register</b-nav-item>
             <b-nav-item v-if="!token" to="/login" style="color: red;">Log In</b-nav-item>
-            <b-nav-item v-else @click="logout()" style="color: purple;">Log Out</b-nav-item>
+            <b-nav-item v-else @click="logout(); $router.push({ name: 'login' });" style="color: purple;">Log Out</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>

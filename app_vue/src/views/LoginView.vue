@@ -2,9 +2,9 @@
     <div id="app">
       <Header title="Log In"/>
       <b-form @submit="onSubmit">
-        <b-form-group label="User Name:" label-for="name">
-          <b-form-input id="name" v-model="form.name" 
-  placeholder="Enter name" required></b-form-input>
+        <b-form-group label="Username:" label-for="username">
+          <b-form-input id="username" v-model="form.username" 
+  placeholder="Enter username" required></b-form-input>
         </b-form-group>
         <b-form-group label="Password:" label-for="password">
           <b-form-input id="password" v-model="form.password" 
@@ -37,11 +37,15 @@
         onSubmit(e) {
           e.preventDefault();
           this.login(this.form);
-          this.$router.push({ name: 'Home' });
+          this.$router.push({ name: 'home' });
         }
       }
     }
   </script>
   <style scoped>
+    #app{
+      margin-left: 35%;
+      margin-right: 35%;
+    }
   </style>
   
