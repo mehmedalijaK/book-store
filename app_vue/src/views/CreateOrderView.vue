@@ -8,10 +8,10 @@
 			<b-container fluid>
 				<b-row>
 					<b-col sm="3">
-						<label for="ime">Your name and surname</label>
+						<label for="imeprezime">Your name and surname</label>
 					</b-col>
 					<b-col sm="9">
-						<b-form-input id="ime" :state="validnoImePrezime" v-model="forma.ime_prezime"></b-form-input>
+						<b-form-input id="imeprezime" :state="validnoImePrezime" v-model="forma.ime_prezime"></b-form-input>
 					</b-col>
 				</b-row>
 				<b-row>
@@ -19,7 +19,7 @@
 						<label>Your address</label>
 					</b-col>
 					<b-col sm="9">
-						<b-form-input id="prezime" :state="validnoAdresa" v-model="forma.adresa"></b-form-input>
+						<b-form-input id="adresa" :state="validnoAdresa" v-model="forma.adresa"></b-form-input>
 					</b-col>
 				</b-row>
 				<b-row>
@@ -27,7 +27,7 @@
 						<label>Your phone number</label>
 					</b-col>
 					<b-col sm="9">
-						<b-form-textarea id="textarea" :state="validnaBrojTelefona" v-model="forma.broj_telefona" rows="4"></b-form-textarea>
+						<b-form-input id="telefon" :state="validnoBrojTelefona" v-model="forma.broj_telefona" rows="4"></b-form-input>
 					</b-col>
 				</b-row>
 			</b-container>
@@ -58,78 +58,137 @@
 </template>
 
 <script>
-	import Header from '@/components/Header.vue'
-	import { mapActions, mapState } from 'vuex';
+import Header from '@/components/Header.vue';
+import { mapActions, mapState } from 'vuex';
 
-	export default {
-		name: "CreateOrderView",
-		components: {
-			Header
-		},
-		data() {
-            return {
-                headerTitle: "Create order",
-                statusnaPoruka: null,
-                statusnaPorukaTip: null,
-                forma: {
-                    ime: null,
-                    prezime: null,
-                    promena: null
-                },
-                selectedBook: null,
-                selectedBooks: [],
-            }
-		},
-        computed: {
-            ...mapState([
-                'knjige'
-            ]),
-            fields() {
-                return [
-                    { key: 'naziv', label: 'Naziv' },
-                    { key: 'opis', label: 'Opis' },
-                    { key: 'cena', label: 'Cena' },
-                    { key: 'quantity', label: 'Quantity', sortable: true },
-                    { key: 'total', label: 'Total' },  // New column for total cost
-                ];
-            },
-            bookOptions() {
-                return this.knjige ? this.knjige.map(book => ({
-                value: book.id,
-                text: book.naziv,
-                })) : [];
-            },
-            totalAmount() {
-                return this.selectedBooks.reduce((total, book) => total + (book.cena * book.quantity), 0);
-            }
-        },
-		mounted() {
-			this.fetchKnjige()
-		},
-		methods: {
-			...mapActions([
-				'fetchKnjige'
-			]),
-            addBook() {
-                if (!this.selectedBook) return;
+export default {
+  name: "CreateOrderView",
+  components: {
+    Header
+  },
+  data() {
+    return {
+      headerTitle: "Create order",
+      statusnaPoruka: null,
+      statusnaPorukaTip: null,
+      forma: {
+        ime_prezime: null,
+        adresa: null,
+        broj_telefona: null
+      },
+      selectedBook: null,
+      selectedBooks: [],
+      orderDetails: [],
+    };
+  },
+  computed: {
+    validnoImePrezime() {
+      if (this.forma.ime_prezime == null) return null;
+      else if (this.forma.ime_prezime.length > 2) return true;
+      else return false;
+    },
+    validnoAdresa() {
+      if (this.forma.adresa == null) return null;
+      else if (this.forma.adresa.length > 2) return true;
+      else return false;
+    },
+    validnoBrojTelefona() {
+      if (this.forma.broj_telefona == null) return null;
+      else if (this.forma.broj_telefona.length > 6) return true;
+      else return false;
+    },
+    ...mapState([
+      'knjige'
+    ]),
+    fields() {
+      return [
+        { key: 'naziv', label: 'Naziv' },
+        { key: 'opis', label: 'Opis' },
+        { key: 'cena', label: 'Cena' },
+        { key: 'quantity', label: 'Quantity', sortable: true },
+        { key: 'total', label: 'Total' },  // New column for total cost
+      ];
+    },
+    bookOptions() {
+      return this.knjige ? this.knjige.map(book => ({
+        value: book.id,
+        text: book.naziv,
+      })) : [];
+    },
+    totalAmount() {
+      return this.selectedBooks.reduce((total, book) => total + (book.cena * book.quantity), 0);
+    }
+  },
+  mounted() {
+    this.fetchKnjige();
+  },
+  methods: {
+    ...mapActions([
+      'fetchKnjige'
+    ]),
+    addBook() {
+      if (!this.selectedBook) return;
 
-                const selectedBook = this.knjige.find(book => book.id === this.selectedBook);
-                if (selectedBook) {
-                    const existingBook = this.selectedBooks.find(book => book.id === selectedBook.id);
+      const selectedBook = this.knjige.find(book => book.id === this.selectedBook);
+      if (selectedBook) {
+        const existingBook = this.selectedBooks.find(book => book.id === selectedBook.id);
 
-                    if (!existingBook) 
-                        this.selectedBooks.push({ ...selectedBook, quantity: 1 });
-                    
-                }
+        if (!existingBook)
+          this.selectedBooks.push({ ...selectedBook, quantity: 1 });
 
-                this.selectedBook = null;
-            },
-			posalji() {
-				
+      }
+
+      this.selectedBook = null;
+    },
+    posalji() {
+        this.orderDetails = this.selectedBooks.map(book => ({
+            bookId: book.id,
+            bookPrice: book.cena,
+            quantity: book.quantity,
+        }));
+
+        const payload = {
+            status: "naruceno",
+            vreme_narucivanja: Date.now(),
+            zakazano_vreme: Date.now(),
+            adresa: this.forma.adresa,
+            telefon: this.forma.broj_telefona,
+            ime_prezime: this.forma.ime_prezime,
+            order_details: this.orderDetails
+        }
+
+        if (this.validnoImePrezime && this.validnoAdresa && this.validnoBrojTelefona) {
+				fetch("http://localhost:9000/narudzbina", {
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					method: "POST",
+					body: JSON.stringify(payload)
+				})
+					.then(res => res.json())
+					.then(res => {
+						console.log(res);
+						//proverimo sta smo dobili kao rezultat, pa postavimo status
+						if (res.error) {
+							this.statusnaPoruka = res.error;
+							this.statusnaPorukaTip = 'danger';
+						} else {
+							//nemamo error polje, dakle sve je u redu
+							this.statusnaPoruka = "Uspesno ste narucili knjige";
+							this.statusnaPorukaTip = 'success';
+						}
+					});
 			}
-		}
-	}
+			else {
+				return; //nista, forma nije validno popunjena
+			}
+
+        console.log(this.orderDetails)
+    }
+  }
+};
 </script>
+
 
 
 <style>
@@ -138,14 +197,14 @@
     margin-right: 25%;
   }
   .user-order {
-    border: 1px solid #ccc; /* Add your desired border color */
-    padding: 35px; /* Add padding for better visual appearance */
+    border: 1px solid #ccc;
+    padding: 35px; 
     margin-top: 50px 
   }
 
   .user-info {
-    border: 1px solid #ccc; /* Add your desired border color */
-    padding: 35px; /* Add padding for better visual appearance */
+    border: 1px solid #ccc; 
+    padding: 35px;
   }
 
   /* Add any additional styles if needed */
