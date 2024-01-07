@@ -53,8 +53,15 @@
         </table>
     </main>
     <script>
+        const cookies = document.cookie.split('=');
+        const token = cookies[cookies.length - 1];
         window.addEventListener("load", async function(){
-            fetch('http://localhost:9000/knjiga/')
+            fetch('http://localhost:9000/knjiga/',
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => response.json()).then( data=>{
                     console.log(data)
                     for(let i=0; i<data.length; i++){
@@ -100,7 +107,7 @@
                             console.log(id)
                             fetch("http://localhost:9000/knjiga/promeni-cenu/" + id, {
                                         method: 'PUT',
-                                        headers: { 'Content-Type': 'application/json' },
+                                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                                         body: JSON.stringify({ cena: c })    	
                             })
                             .then( response=>response.json())

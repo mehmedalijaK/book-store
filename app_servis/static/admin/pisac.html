@@ -48,6 +48,8 @@
     </form>
 </main>
 <script>
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
     window.onload = function() {
         var forma = document.getElementById('forma');
         forma.addEventListener('submit', handleSubmit);
@@ -55,7 +57,12 @@
             var url = new URL( window.location.href )
             id = url.searchParams.get("id");  //shvatiće da se misli na globalnu varijablu id
 
-            fetch("http://localhost:9000/pisac/" + id).then( resp=>resp.json() )
+            fetch("http://localhost:9000/pisac/" + id,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then( resp=>resp.json() )
             .then( data=>{
                 document.getElementById("naziv").value = data.naziv;
                
@@ -93,7 +100,7 @@
 
             fetch("http://localhost:9000/pisac/"+id, {
                         method:"PUT",
-                                    headers: { 'Content-Type': 'application/json' },
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                         body: JSON.stringify(novoPisac)
             })
             .then(succ=>succ.json())
@@ -110,7 +117,8 @@
             var url = new URL( window.location.href )
             id = url.searchParams.get("id");
             if( confirm("Potvrdi brisanje") ){
-                fetch("http://localhost:9000/pisac/"+id, { method:"DELETE" })
+                fetch("http://localhost:9000/pisac/"+id, { method:"DELETE", headers: {'Authorization': `Bearer ${token}`}},
+                )
                     .then( resp=>resp.json()).then(data=>{
                     //response sadrzi samo id obrisanog
                     alert("Obrisan je zapis "+data);

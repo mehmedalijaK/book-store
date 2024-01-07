@@ -66,6 +66,8 @@
         </form>
     </main>
     <script>
+        const cookies = document.cookie.split('=');
+        const token = cookies[cookies.length - 1];
         window.onload = function() {
             var forma = document.getElementById('forma');
             forma.addEventListener('submit', handleSubmit);
@@ -74,7 +76,12 @@
             var url = new URL( window.location.href )
             id = url.searchParams.get("id");  //shvatiće da se misli na globalnu varijablu id
 
-            fetch("http://localhost:9000/narudzbina/" + id).then( resp=>resp.json() )
+            fetch("http://localhost:9000/narudzbina/" + id,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then( resp=>resp.json() )
             .then( data=>{
                 console.log(data)
                 document.getElementById("zakazano-vreme").innerText = data.zakazano_vreme;
@@ -91,10 +98,20 @@
                     }
                 }
 
-                fetch("http://localhost:9000/narudzbina/proizvodi/" + id).then( resp=>resp.json())
+                fetch("http://localhost:9000/narudzbina/proizvodi/" + id,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }).then( resp=>resp.json())
                 .then(data => {
                     data.forEach(function(element) {
-                        fetch("http://localhost:9000/knjiga/" + element.KnjigaId).then( resp=>resp.json()).then(book => {
+                        fetch("http://localhost:9000/knjiga/" + element.KnjigaId,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        }).then( resp=>resp.json()).then(book => {
                             var list = document.getElementById("sadrzaj");
                             var listItem = document.createElement("li");
                             const newItem = book.naziv + " " + element.komada + "x"
@@ -121,7 +138,7 @@
             }
             fetch("http://localhost:9000/narudzbina/" + id, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(data),
             })
                 .then(response => response.json())

@@ -50,6 +50,9 @@
 </main>
 
 <script>
+    const cookies = document.cookie.split('=');
+    const token = cookies[cookies.length - 1];
+
     window.onload = function() {
         var forma = document.getElementById('forma');
         forma.addEventListener('submit', handleSubmit);
@@ -67,7 +70,7 @@
 
             fetch("http://localhost:9000/kategorija", {
                         method:"POST",
-                                    headers: { 'Content-Type': 'application/json' },
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                         body: JSON.stringify(novoKategorija)
             })
             .then(succ=>succ.json())
