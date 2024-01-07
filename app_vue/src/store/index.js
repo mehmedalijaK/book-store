@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     knjige: [],
+    token: ''
   },
   getters: {
 
@@ -14,6 +15,14 @@ export default new Vuex.Store({
     addKnjige(state, knjige){
       state.knjige = knjige
     },
+    setToken(state, token) {
+      state.token = token;
+      localStorage.token = token;
+    },
+    removeToken(state) {
+      state.token = '';
+      localStorage.token = '';
+    },
   },
   actions: {
     async fetchKnjige({commit}){
@@ -21,6 +30,28 @@ export default new Vuex.Store({
         .then( res=>res.json() )
           .then( data => commit('addKnjige', data) );
     },
+    register({ commit }, obj) {
+      fetch('http://localhost:9001/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj)
+      }).then( res => res.json() )
+        .then( data => commit('setToken', data.token) );
+    },
+    login({ commit }, obj) {
+      fetch('http://localhost:9001/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj)
+    }).then( res => res.json() )
+      .then( data => {
+        if (data.msg) {
+          alert(data.msg);
+        } else {
+          commit('setToken', data.token)
+        }
+      });
+    }
   },
   modules: {
   }
