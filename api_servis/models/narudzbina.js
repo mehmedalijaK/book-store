@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Narudzbina.init({
-    status: DataTypes.STRING,
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     vreme_narucivanja: {
       type: DataTypes.DATE,
       allowNull: false

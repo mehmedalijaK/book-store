@@ -48,8 +48,21 @@ route.post("/", async (req, res) => {
         novi.adresa = req.body.adresa
         novi.telefon = req.body.telefon
         novi.ime_prezime = req.body.ime_prezime
+        order_details = req.body.order_details
+
         const insertovani = await Narudzbina.create(novi);
+        console.log(insertovani)
+        order_details.forEach(async (detail) => {
+            const insert = await StavkaNarudzbine.create({
+                komada: detail.quantity,
+                jedinicna_cena: detail.bookPrice,
+                KnjigaId: detail.bookId,
+                NarudzbinaId: insertovani.id
+            })
+        })
+
         return res.json(insertovani);
+
     }catch(err){
          console.log(err);
          res.status(500).json({ error: "Error", data: err })
@@ -60,8 +73,8 @@ route.post("/", async (req, res) => {
 route.put("/:id", async (req, res) => {
     try{
         const novi = await Narudzbina.findByPk(req.params.id);
-        novi.status = req.query.status
-        novi.save();
+        novi.status = req.body.status
+        await novi.save();
         return res.json(novi);
     }catch(err){
         console.log(err);
