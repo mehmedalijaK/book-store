@@ -1,9 +1,25 @@
 const express = require('express')
 const {Knjiga, Kategorija} = require("../models");
 const route = express.Router()
+const jwt = require('jsonwebtoken');
 
 route.use(express.json())
 route.use(express.urlencoded({extended: true}))
+
+function authToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log(token)
+    if (token == null) return res.status(401).json({ msg: err });
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+       if (err) return res.status(403).json({ msg: err });
+       req.user = user;
+       next();
+    });
+    
+  }
+  
+route.use(authToken);
 
 route.get('/', async (req, res)=>{
     try{
