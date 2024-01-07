@@ -148,7 +148,7 @@ export default {
         }));
 
         const payload = {
-            status: "naruceno",
+            status: "Novo",
             vreme_narucivanja: Date.now(),
             zakazano_vreme: Date.now(),
             adresa: this.forma.adresa,
